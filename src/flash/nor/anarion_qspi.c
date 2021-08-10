@@ -187,7 +187,7 @@ static int aspi_execute_chain(struct flash_bank *bank)
 
 	return 0;
 }
-
+#ifdef ASPI_QPI_MODE
 static int aspi_send_cmd_qpien(struct flash_bank *bank)
 {
 	struct qspi_io_chain chain[] =  {
@@ -196,7 +196,7 @@ static int aspi_send_cmd_qpien(struct flash_bank *bank)
 	aspi_setup_chain(bank, chain, 1);
 	return aspi_execute_chain(bank);
 }
-
+#endif
 static int aspi_send_cmd_qpidi(struct flash_bank *bank)
 {
 	struct qspi_io_chain chain[] =  {
@@ -435,7 +435,6 @@ int anarion_qspi_flash_read(struct flash_bank *bank, uint8_t *buffer,
 
 static int anarion_qspi_probe(struct flash_bank *bank)
 {
-	int ret;
 	int i;
 	uint32_t id;
 	union stupid_qspi_reg data_reg;
@@ -455,17 +454,17 @@ static int anarion_qspi_probe(struct flash_bank *bank)
 
 	// progam the QE bit in status register for QSPI or not
 	// the QE bit is NON-Volatile once it is written util next write
-	ret = aspi_send_cmd(bank, SPIFLASH_WRITE_ENABLE);
+	aspi_send_cmd(bank, SPIFLASH_WRITE_ENABLE);
 	#ifdef ASPI_QPI_MODE
-	ret = aspi_send_cmd_data_out(bank, SPIFLASH_WRITE_STATUS, 1, 0x40);  // QE=1
-	ret = aspi_send_cmd_qpien(bank); // qpi mode enable
+	aspi_send_cmd_data_out(bank, SPIFLASH_WRITE_STATUS, 1, 0x40);  // QE=1
+	aspi_send_cmd_qpien(bank); // qpi mode enable
 	LOG_INFO("Anarion NorFlash QE=1");
   	#else
-  	ret = aspi_send_cmd_data_out(bank, SPIFLASH_WRITE_STATUS, 1, 0x00);  // QE=0
-	ret = aspi_send_cmd_qpidi(bank); // qpi mode disable
+  	aspi_send_cmd_data_out(bank, SPIFLASH_WRITE_STATUS, 1, 0x00);  // QE=0
+	aspi_send_cmd_qpidi(bank); // qpi mode disable
 	LOG_INFO("Anarion NorFlash QE=0");
 	#endif
-	ret = aspi_send_cmd(bank, SPIFLASH_WRITE_DISABLE);
+	aspi_send_cmd(bank, SPIFLASH_WRITE_DISABLE);
 	aspi->probed = 1;	// set probed to 1 after first probe after POR
 
 	/* The DATA register is 4-bytes, little endian */

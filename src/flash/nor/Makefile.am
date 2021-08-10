@@ -44,7 +44,8 @@ NOR_DRIVERS = \
 	mini51.c \
 	nuc1x.c \
 	nrf51.c \
-	mrvlqspi.c
+	mrvlqspi.c \
+	anarion_qspi.c
 
 noinst_HEADERS = \
 	core.h \
