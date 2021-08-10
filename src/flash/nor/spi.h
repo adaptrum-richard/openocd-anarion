@@ -49,6 +49,9 @@ extern const struct flash_device flash_devices[];
 #define SPIFLASH_BSY_BIT		0x00000001 /* WIP Bit of SPI SR on SMI SR */
 #define SPIFLASH_WE_BIT			0x00000002 /* WEL Bit of SPI SR on SMI SR */
 
+/* fieds in SPI flash contoller register */
+#define SPIFLASH_FCK_STABLE		0x00010000 /* FCK Bit of SPI SR on SMI SR */
+
 /* SPI Flash Commands */
 #define SPIFLASH_READ_ID		0x9F /* Read Flash Identification */
 #define SPIFLASH_READ_STATUS	0x05 /* Read Status Register */
@@ -56,3 +59,8 @@ extern const struct flash_device flash_devices[];
 #define SPIFLASH_PAGE_PROGRAM	0x02 /* Page Program */
 #define SPIFLASH_FAST_READ		0x0B /* Fast Read */
 #define SPIFLASH_READ			0x03 /* Normal Read */
+#define SPIFLASH_WRITE_STATUS		0x01 /* Write Status Register */
+#define SPIFLASH_WRITE_DISABLE		0x04 /* Write Diable */
+#define SPIFLASH_WRITE_DUMMYCYC		0x63 /* Fast Read Dummy Cycle(s) */
+#define SPIFLASH_QPIEN			0x35 /* QPI Enable */
+#define SPIFLASH_QPIDI			0xF5 /* QPI Disable */
